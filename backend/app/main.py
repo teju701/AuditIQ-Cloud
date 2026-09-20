@@ -14,7 +14,7 @@ from app.api.routes.export import router as export_router
 from app.api.routes.health import router as health_router
 from app.api.routes.query import router as query_router
 from app.api.routes.upload import router as upload_router
-from app.core.settings import APP_SUBTITLE, APP_TITLE, APP_VERSION, CORS_ORIGINS
+from app.core.settings import APP_SUBTITLE, APP_TITLE, APP_VERSION, CORS_ORIGINS, DEV_MODE
 
 # Configure CloudWatch-friendly structured logging
 logging.basicConfig(
@@ -32,6 +32,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=CORS_ORIGINS,
+    allow_origin_regex=r"^https?://.*" if DEV_MODE else None,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
