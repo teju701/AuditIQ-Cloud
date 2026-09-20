@@ -1,0 +1,14 @@
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache
+.venv
+venv
+env
+*.log
+.s3_local
+.dynamodb_local
+.env
+.git
+.gitignore

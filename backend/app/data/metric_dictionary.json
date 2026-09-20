@@ -1,0 +1,62 @@
+{
+  "metrics": {
+    "duplicate_vendor": {
+      "description": "Vendors sharing the same GSTIN but registered under different names",
+      "field": "gstin",
+      "rule": "same gstin, different vendor_name"
+    },
+    "round_number_invoice": {
+      "description": "Invoice amount that is a round number (divisible by 1000 with no paise)",
+      "field": "amount",
+      "rule": "amount % 1000 == 0"
+    },
+    "late_payment": {
+      "description": "Payment made more than 30 days after the due date",
+      "fields": ["payment_date", "due_date"],
+      "rule": "payment_date > due_date + 30 days"
+    },
+    "no_purchase_order": {
+      "description": "Transactions above Rs 10,000 with no associated purchase order",
+      "fields": ["amount", "has_purchase_order"],
+      "rule": "amount > 10000 AND has_purchase_order == False"
+    },
+    "high_value_transaction": {
+      "description": "Any single transaction above Rs 2,00,000",
+      "field": "amount",
+      "rule": "amount > 200000"
+    },
+    "disputed_invoice": {
+      "description": "Invoices currently in a disputed status",
+      "field": "status",
+      "rule": "status == Disputed"
+    },
+    "duplicate_invoice": {
+      "description": "Invoice numbers appearing more than once across transactions",
+      "field": "invoice_number",
+      "rule": "duplicate invoice_number count > 1"
+    },
+    "spending_spike": {
+      "description": "Transaction amounts exceeding 2 standard deviations above dataset average",
+      "field": "amount",
+      "rule": "amount > mean + 2*std"
+    },
+    "vendor_concentration": {
+      "description": "Vendors accounting for more than 12% of total cumulative spend",
+      "fields": ["vendor_name", "amount"],
+      "rule": "sum(vendor_amount) / total_spend > 0.12"
+    },
+    "split_payment": {
+      "description": "Multiple transactions to same vendor clustered just below round policy threshold",
+      "fields": ["vendor_name", "amount"],
+      "rule": "recurring vendor transactions in 45k-50k or 90k-100k ranges"
+    }
+  },
+  "field_definitions": {
+    "amount": "Invoice amount in Indian Rupees (INR)",
+    "gstin": "Goods and Services Tax Identification Number — unique per legal entity",
+    "has_purchase_order": "Boolean — whether a valid PO was raised before invoice",
+    "payment_date": "Date on which payment was actually released",
+    "due_date": "Contractual payment deadline",
+    "status": "Current state: Paid, Pending, or Disputed"
+  }
+}
