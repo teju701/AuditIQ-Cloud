@@ -57,6 +57,17 @@ async def cloudwatch_observability_middleware(request: Request, call_next):
     return response
 
 
+@app.get("/")
+def root():
+    return {
+        "status": "online",
+        "service": APP_TITLE,
+        "version": APP_VERSION,
+        "docs_url": "/docs",
+        "health_url": "/health",
+    }
+
+
 app.include_router(cache_router)
 app.include_router(upload_router)
 app.include_router(query_router)
